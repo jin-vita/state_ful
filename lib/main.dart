@@ -33,23 +33,41 @@ class _AppState extends State<App> {
     });
   }
 
+  bool showTitle = true;
+  void toggleTitle() {
+    setState(() {
+      showTitle = !showTitle;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.deepPurple,
+            decorationColor: Colors.blueGrey,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Click Count',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
+              showTitle
+                  ? const LargeTitle(title: 'Click Count')
+                  : const Text(
+                      'nothing',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
               Text(
-                '$counter',
+                (counter == 0) ? '' : '$counter',
                 style: const TextStyle(
                   fontSize: 30,
                 ),
@@ -63,7 +81,7 @@ class _AppState extends State<App> {
                 height: 30,
               ),
               const Text(
-                'Click Count',
+                'generate number',
                 style: TextStyle(
                   fontSize: 30,
                 ),
@@ -88,9 +106,57 @@ class _AppState extends State<App> {
                 onPressed: reset,
                 icon: const Icon(Icons.restore),
               ),
+              const SizedBox(
+                height: 30,
+              ),
+              IconButton(
+                iconSize: 40,
+                onPressed: toggleTitle,
+                icon: const Icon(Icons.remove_red_eye),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class LargeTitle extends StatefulWidget {
+  final String title;
+
+  const LargeTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  State<LargeTitle> createState() => _LargeTitleState();
+}
+
+class _LargeTitleState extends State<LargeTitle> {
+  @override
+  void initState() {
+    super.initState();
+
+    print('initState!');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('dispose!');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build!');
+
+    return Text(
+      widget.title,
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).textTheme.titleLarge?.color,
       ),
     );
   }
